@@ -270,17 +270,20 @@ if(S.role!=='support')S.role='customer';
 function saveT(){if(MODE==='local')save('pd-tickets',S.tickets)}
 function lastT(t){return t.msgs.length?t.msgs[t.msgs.length-1].t:t.created}
 function kno(u){var h=0;for(var i=0;i<u.length;i++)h=(h*31+u.charCodeAt(i))>>>0;return 'K-'+(10000+h%90000)}
-function canSupport(){return MODE==='local'||IS_ADMIN}
-function RO(){return MODE==='db'&&!CAN_WRITE}
-function mid(){return 'm'+Date.now().toString(36)+(Math.random().toString(36)+'0000').slice(2,6)}
-function newId(){return 'T-'+(Math.random().toString(36)+'000').slice(2,5).toUpperCase()+Date.now().toString(36).slice(-3).toUpperCase()}
-function emptyMsg(){return S.role==='support'?'Noch keine Tickets von Kunden.':'Du hast noch keine Tickets. Erstelle dein erstes Ticket.'}
-function modeHint(){return MODE==='db'?(S.role==='support'?'Alle Kundentickets, live aktualisiert.':'Deine Tickets sind live mit dem Support verbunden.'):'Demo-Modus: Beispieltickets, nur in diesem Browser gespeichert.'}
-function vis(){return S.tickets.filter(function(t){return S.role==='support'||t.cust==='me'}).sort(function(a,b){return lastT(b)-lastT(a)})}
-function custName(t){if(t.cust==='me')return ME;var n=NAMES[t.owner];return n?n+' · '+t.cust:t.cust}
-function ago(t){var m=Math.round((Date.now()-t)/60000);if(m<1)return 'gerade eben';if(m<60)return 'vor '+m+' Min.';var h=Math.round(m/60);if(h<24)return 'vor '+h+' Std.';var d=Math.round(h/24);return 'vor '+d+(d===1?' Tag':' Tagen')}
-function pill(s){return '<span class="pill '+ST[s].c+'">'+ST[s].l+'</span>'}
+var SUPPORT_UNLOCKED = false;
 
+function canSupport(){
+  if (SUPPORT_UNLOCKED) return true;
+
+  const pw = prompt("Support-Passwort eingeben:");
+
+  if (pw === "KeliSupport#20266!") {
+    SUPPORT_UNLOCKED = true;
+    return true;
+  }
+
+  return false;
+}
 /* ---------- Shell ---------- */
 var APPS=[
  {id:'tickets',label:'Tickets',g:'Support'},{id:'neu',label:'Neues Ticket',g:'Support'},{id:'hilfe',label:'Hilfe',g:'Support'},{id:'profil',label:'Profil',g:'Support'},

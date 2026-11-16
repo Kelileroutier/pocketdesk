@@ -273,16 +273,7 @@ function kno(u){var h=0;for(var i=0;i<u.length;i++)h=(h*31+u.charCodeAt(i))>>>0;
 var SUPPORT_UNLOCKED = false;
 
 function canSupport(){
-  if (SUPPORT_UNLOCKED) return true;
-
-  const pw = prompt("Support-Passwort eingeben:");
-
-  if (pw === "KeliSupport#20266!") {
-    SUPPORT_UNLOCKED = true;
-    return true;
-  }
-
-  return false;
+  return MODE==='local'||IS_ADMIN;
 }
 /* ---------- Shell ---------- */
 var APPS=[
